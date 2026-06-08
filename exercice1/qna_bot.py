@@ -105,15 +105,19 @@ image = (
 app = modal.App("dataroots-qna-bot", image=image)
 
 
+NO_ANSWER = "NO_ANSWER"
+
 SYSTEM_INSTRUCTION = (
     "You are a question-answering bot for Dataroots. You answer ONLY using the "
     "KNOWLEDGE BASE provided in the user message.\n"
     "Rules:\n"
-    "- Answer concisely and to the point, with no padding or preamble.\n"
-    "- Ground every answer strictly in the KNOWLEDGE BASE. Never use outside "
-    "knowledge and never guess.\n"
-    "- If the answer is not contained in the KNOWLEDGE BASE, reply with EXACTLY "
-    f"this text and nothing else:\n{FALLBACK}"
+    "- If the KNOWLEDGE BASE contains the answer: reply concisely and to the "
+    "point, grounded strictly in it, with no padding or preamble.\n"
+    "- If the KNOWLEDGE BASE does NOT contain the answer, or you are unsure: "
+    f"reply with exactly this token and nothing else: {NO_ANSWER}\n"
+    "- Never use outside knowledge, never guess, and never explain that the "
+    f"knowledge base is missing something. Either answer from it, or output "
+    f"{NO_ANSWER}."
 )
 
 
@@ -138,7 +142,13 @@ def _answer(query: str) -> str:
             temperature=0,  # deterministic, no creative drift
         ),
     )
-    return (resp.text or "").strip() or FALLBACK
+    out = (resp.text or "").strip()
+    # The model emits the NO_ANSWER token when the doc doesn't cover the question;
+    # we map that to the exact required fallback string ourselves, so the wording
+    # is always byte-for-byte correct (never paraphrased by the model).
+    if not out or NO_ANSWER in out.upper():
+        return FALLBACK
+    return out
 
 
 # --- Official submission endpoint: GET ?query=... -> {"answer": "..."} ---------
