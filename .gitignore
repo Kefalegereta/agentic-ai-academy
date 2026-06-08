@@ -1,0 +1,9 @@
+# OS / Python noise
+.DS_Store
+__pycache__/
+*.pyc
+
+# Course material (not my code): briefs, slides, brand assets, personal notes
+*.pdf
+/*.png
+/info-operativa.md
