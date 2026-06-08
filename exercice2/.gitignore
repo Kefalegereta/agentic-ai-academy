@@ -1,0 +1,16 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.uv/
+
+# uv lockfile is kept (good for reproducibility); uncomment to ignore.
+# uv.lock
+
+# OS
+.DS_Store
