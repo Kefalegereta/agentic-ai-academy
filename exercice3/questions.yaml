@@ -1,0 +1,65 @@
+# Benchmark questions for the beer books dataset.
+# Sources:
+#   - "The Curiosities of Ale & Beer" (Bickerdyke, 1889)
+#   - "Beer: Its History and Its Economic Value" (Salem, 1880)
+#
+# Mix of keyword-friendly (names, dates, numbers) and semantic-friendly (conceptual)
+# so the benchmark exercises both retrieval strategies.
+
+questions:
+  # --- Keyword-friendly (exact names / dates / numbers) ---
+
+  - question: "What Saxon verb did Horne Tooke claim was the origin of the word 'ale', and what does it mean?"
+    reference_answer: >
+      Horne Tooke argued that 'ale' derives from the Saxon verb ælan, which means to inflame.
+
+  - question: "In what year was a brewer in Oxford legally required to let his ale stand twelve hours before selling it to colleges?"
+    reference_answer: >
+      In 1444, a brewer of Oxford was compelled before the Chancellor to swear that he would
+      let his ale stand twelve hours to clear before carrying it to hall or college for sale.
+
+  - question: "How often did Mrs. Balfour of Denbog brew ale, and in which months of the year did she brew?"
+    reference_answer: >
+      Mrs. Balfour brewed twice a year, each March and October, making enough ale to last
+      for the ensuing six months.
+
+  - question: "What percentage of pure alcohol does Irish whisky contain according to the book?"
+    reference_answer: >
+      Irish whisky contains more than 57 percent of pure alcohol.
+
+  - question: "What did the Massachusetts State Board of Health report in January 1879 about trends in drunkenness?"
+    reference_answer: >
+      The 10th Annual Report of the Massachusetts State Board of Health (January 1879) stated
+      that a more severe public judgment of drunkenness had tended to decrease its prevalence,
+      and that light German beer was being used more and more each year.
+
+  # --- Semantic-friendly (conceptual / paraphrased) ---
+
+  - question: "What were scot-ales, and why were they forbidden during the reign of King John?"
+    reference_answer: >
+      Scot-ales were communal drinking gatherings where participants divided the cost of the
+      ale among themselves. They were banned during the reign of King John because they were
+      used as occasions for extortion.
+
+  - question: "What goes wrong during the malting process if the malt is not dried properly?"
+    reference_answer: >
+      If malt is not sufficiently dried, a worm called a wivell grows in the flour of the
+      grain, spoiling it.
+
+  - question: "What were the main arguments made by opponents of malt liquors in the nineteenth century?"
+    reference_answer: >
+      Opponents argued that malt liquors directly cause intemperance, lead drinkers toward
+      stronger spirits, habitually cause ill-health, provide no real food value, and are
+      dangerous as medicine because they create a habit.
+
+  - question: "Why was beer traditionally recommended for nursing mothers, and how was it compared nutritionally to another common drink?"
+    reference_answer: >
+      Beer was recommended for nursing women because of its nourishing and milk-producing
+      qualities. The book compares it nutritionally to milk, saying beer is next to milk in
+      providing phosphates and other minerals in a form easy to assimilate.
+
+  - question: "What did Dr. Schoellamer argue about beer in his report to the Industrial Society of Mulhouse?"
+    reference_answer: >
+      Dr. Schoellamer described beer as one of the best and most wholesome drinks available,
+      arguing that good beer is capable of replacing all other fermented drinks and that its
+      moderate consumption should be strongly recommended.

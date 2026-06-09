@@ -1,0 +1,10 @@
+# Entorno y secretos
+.env
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Datos generados (se regeneran con ingest.py)
+data/books/

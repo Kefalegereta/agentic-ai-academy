@@ -1,0 +1,15 @@
+[project]
+name = "qna-bot-rag"
+version = "0.1.0"
+description = "Servicio RAG que responde preguntas sobre una coleccion de libros (.txt)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "openai>=1.40",          # cliente Azure OpenAI (embeddings + generacion)
+    "tiktoken>=0.7",         # troceo por tokens
+    "psycopg[binary]>=3.2",  # cliente PostgreSQL
+    "pgvector>=0.3",         # tipo vector + helpers para psycopg
+    "python-dotenv>=1.0",
+    "requests>=2.32",        # descarga de los libros
+]
