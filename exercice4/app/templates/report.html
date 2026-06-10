@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}{{ r.filename }} — Data Quality Report{% endblock %}
+{% block topright %}<a href="/" class="back">← nuevo análisis</a>{% endblock %}
+{% block content %}
+  <header class="report-head reveal" style="--i:0">
+    <div class="eyebrow">Data quality report</div>
+    <h1 class="filename">{{ r.filename }}</h1>
+    <div class="meta"><b>{{ "{:,}".format(r.n_rows) }}</b> filas · <b>{{ r.n_cols }}</b> columnas · {{ r.created_at }}</div>
+  </header>
+
+  {% set band = r.overall_score | band %}
+  <section class="hero reveal" style="--i:1">
+    <div class="gauge-wrap">
+      <svg class="gauge" viewBox="0 0 200 200">
+        <circle class="gauge-track" cx="100" cy="100" r="86"></circle>
+        <circle class="gauge-fill band-{{ band }}" cx="100" cy="100" r="86" data-score="{{ r.overall_score }}"></circle>
+      </svg>
+      <div class="gauge-center">
+        <div class="score-num band-{{ band }}" data-count="{{ r.overall_score }}" data-decimals="0">0</div>
+        <div class="score-label">score / 100</div>
+      </div>
+    </div>
+    <div class="dims">
+      {% for d in r.dimensions %}
+      {% set db = d.score | band %}
+      <div class="dim">
+        <div class="dim-top">
+          <span class="dim-name">{{ d.name }}<span class="w">{{ d.weight }}%</span></span>
+          <span class="dim-val band-{{ db }}" data-count="{{ d.score }}" data-decimals="1">0</span>
+        </div>
+        <div class="track"><span class="fill band-{{ db }}" data-w="{{ d.score }}"></span></div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <h2 class="section reveal" style="--i:0">
+    <span class="idx">01</span> Avisos
+    {% if r.warnings %}<span class="count-badge">{{ r.warnings|length }}</span>{% endif %}
+  </h2>
+  {% if r.warnings %}
+  <ul class="warn-list reveal" style="--i:1">
+    {% for w in r.warnings %}
+    <li class="warn-item">
+      <span class="dot kind-{{ w.kind }}"></span>
+      <span class="warn-col">{{ w.column or "—" }}</span>
+      <span class="warn-kind">{{ w.kind }}</span>
+      <span class="warn-msg">{{ w.message }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="allclear reveal" style="--i:1"><span class="ring"></span> Sin avisos — ninguna columna cruza los umbrales.</div>
+  {% endif %}
+
+  <h2 class="section reveal" style="--i:0"><span class="idx">02</span> Perfil por columna</h2>
+  <div class="table-card reveal" style="--i:1">
+    <table class="tbl">
+      <thead><tr>
+        <th>Columna</th><th>Tipo</th>
+        <th style="text-align:right">Faltante</th><th style="text-align:right">Inválido</th>
+        <th style="text-align:right">Distintos</th><th style="text-align:right">Outliers</th>
+        <th style="text-align:right">Mín</th><th style="text-align:right">Máx</th><th style="text-align:right">Media</th>
+      </tr></thead>
+      <tbody>
+        {% for c in r.columns %}
+        <tr>
+          <td class="colname">{{ c.name }}{% if c.is_constant %}<span class="tag const">const</span>{% endif %}</td>
+          <td class="type">{{ c.inferred_type }}</td>
+          <td class="num">
+            <span class="cellbar">
+              <span class="mini"><i class="{{ 'v-bad' if c.missing_pct > 5 else 'v-good' }}" data-w="{{ c.missing_pct }}"></i></span>
+              <span class="{{ 'v-bad' if c.missing_pct > 5 else '' }}">{{ "%.1f"|format(c.missing_pct) }}%</span>
+            </span>
+          </td>
+          <td class="num">
+            <span class="cellbar">
+              <span class="mini"><i class="{{ 'v-bad' if c.invalid_pct > 5 else 'v-good' }}" data-w="{{ c.invalid_pct }}"></i></span>
+              <span class="{{ 'v-bad' if c.invalid_pct > 5 else '' }}">{{ "%.1f"|format(c.invalid_pct) }}%</span>
+            </span>
+          </td>
+          <td class="num">{{ "{:,}".format(c.distinct_count) }}</td>
+          <td class="num {{ 'v-warn' if c.outlier_pct > 1 else '' }}">{{ c.outlier_count }}</td>
+          <td class="num">{{ "%.2f"|format(c.min) if c.min is not none else "·" }}</td>
+          <td class="num">{{ "%.2f"|format(c.max) if c.max is not none else "·" }}</td>
+          <td class="num">{{ "%.2f"|format(c.mean) if c.mean is not none else "·" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="/" class="backlink">← Analizar otro CSV</a>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero-home">
+    <div class="eyebrow reveal" style="--i:0">Perfilado &amp; calidad de datos</div>
+    <h1 class="display reveal" style="--i:1">Sube un CSV.<br><em>Conoce su calidad.</em></h1>
+    <p class="lede reveal" style="--i:2">
+      Completitud, validez, unicidad y distribución — medidas, puntuadas y resumidas
+      en un informe legible.
+    </p>
+  </section>
+
+  {% if error %}
+  <div class="err reveal" style="--i:0"><span class="x">✕</span> {{ error }}</div>
+  {% endif %}
+
+  <form action="/upload" method="post" enctype="multipart/form-data" class="reveal" style="--i:3">
+    <label class="drop">
+      <input type="file" name="file" accept=".csv,text/csv" required>
+      <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-4 4M12 4l4 4M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+      </div>
+      <h3>Arrastra tu CSV aquí</h3>
+      <div class="hint">o haz clic para elegir · cabeceras · coma · UTF-8 · hasta 50&nbsp;MB</div>
+      <div class="chosen"></div>
+    </label>
+    <div class="actions">
+      <button type="submit" class="btn btn-analyze" disabled>Analizar calidad</button>
+    </div>
+  </form>
+
+  <h2 class="section reveal" style="--i:0"><span class="idx">02</span> Historial</h2>
+  {% if reports %}
+  <div class="hist reveal" style="--i:1">
+    {% for s in reports %}
+    <a href="/reports/{{ s.id }}" class="hist-row">
+      <span class="id">#{{ s.id }}</span>
+      <span class="fn">{{ s.filename }}</span>
+      <span class="dt">{{ s.created_at }}</span>
+      <span class="rc">{{ s.n_rows }}×{{ s.n_cols }}</span>
+      <span class="sc {{ s.overall_score | band }}">{{ "%.1f"|format(s.overall_score) }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="hist reveal" style="--i:1"><div class="empty">Aún no hay informes. Sube tu primer CSV.</div></div>
+  {% endif %}
+{% endblock %}
